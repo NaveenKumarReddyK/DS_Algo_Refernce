@@ -1,5 +1,5 @@
 import java.lang.Math;
-public class LOngestSubesquence {
+public class Longest_Common_Subsequence {
     public static void lss(String s1,String s2){
         // if equal then add diagonal element
         //If not equal max(left,top)
