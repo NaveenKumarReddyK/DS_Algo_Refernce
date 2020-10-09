@@ -1,4 +1,4 @@
-public class LongestIncreasingSubSequence {
+public class Longest_Increasing_Subsequence {
      public int lengthOfLIS(int[] nums) {
         //user binary search
         int len = nums.length;
