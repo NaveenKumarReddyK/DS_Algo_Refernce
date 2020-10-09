@@ -1,22 +1,23 @@
 public class LongestIncreasingSubSequence {
-    public static void liss(int[] arr){
-        int len = arr.length;
-        int[] lis = new int[len];
-        for(int i=0;i<len;i++){
-            lis[i] = 1;
-        }
-
-        for(int i=1;i<len;i++){
-            for(int j=0;j<i;j++){
-                if(arr[i]>arr[j] && lis[i]<lis[j]+1){
-                    lis[i] = lis[j]+1;
-                }
+     public int lengthOfLIS(int[] nums) {
+        //user binary search
+        int len = nums.length;
+        int[] dp = new int[len];
+        int index = 0;
+        for(int num : nums){
+            int i = Arrays.binarySearch(dp,0,index,num);
+            if(i < 0){
+                i = -(i+1);
             }
+                dp[i] = num;
+                if(i == index){
+                        index++;   
+                }
         }
-        System.out.println(lis[len-1]);
+        return index;
     }
     public static void main(String[] args){
         int[] arr = {10, 22, 9, 33, 21, 50, 41, 60 };
-        liss(arr);
+        System.out.println(lengthOfLIS(arr));
     }
 }
