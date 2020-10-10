@@ -1,3 +1,5 @@
+//Refernce : https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/discuss/14734/Easy-java-O(logn)-solution
+
 // Main Idea: 
 // To get left position : we need to check the mid value with "HIGH" i.e, nums[mid] >= target then high = mid-1
 // To get right positoin : we need to check mid value with "LOW" i.e, nums[mid] <= target then low = mid + 1
