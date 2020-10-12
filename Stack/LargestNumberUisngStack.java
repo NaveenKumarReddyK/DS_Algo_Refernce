@@ -1,5 +1,6 @@
 import java.util.Stack;
 public class LargestNumberUisngStack {
+    //Maximum number using stack
     public static void largestInStack(Stack s){
         int temp = (int) s.peek();
         s.pop();
