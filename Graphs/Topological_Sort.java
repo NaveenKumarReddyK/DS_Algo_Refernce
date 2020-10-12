@@ -36,7 +36,7 @@ class TSort_Graph{
         s.push(curr);
     }
 }
-public class TopologicalSOrting {
+public class Topological_Sort {
     public static void main(String[] args) {
         int numOfVertices = 6;
         ArrayList<ArrayList<Integer>> al = new ArrayList<ArrayList<Integer>>();
