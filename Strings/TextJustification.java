@@ -1,97 +1,58 @@
-import java.util.*;
-
-class TextJustificatoin{
-    public static void fullJustify(String[] words, int maxWidth) {
-        //add the lengths
-        //check if teh next string sum is greater than maxwidth
-        //if so stop and proceed with you helper function to make required string
-        int sum = 0;
-
-        int start = 0;
-        List<String> res = new ArrayList<>();
-
-        for(int i=0;i<words.length;i++){
-            sum+=words[i].length()+1;
-            if(sum-1>maxWidth){//because there should be atleast one space
-                String currStr = help_justify(words,start,i,maxWidth);
-                res.add(currStr);
-                sum = 0;
-                start = i;
-            }
-
-
-        }
-        //check if has reached to the end
-
-        String lastOne = justify_Last(words,start,maxWidth);
-        res.add(lastOne);
-        System.out.println(lastOne);
-//        return res;
-//        for(String s : res){
-//            System.out.println(s);
-//        }
-    }
-    public static String help_justify(String[] arr,int start,int end,int width){
-        StringBuilder sb  = new StringBuilder();
-        int len = 0;
-        int count = 0;
-        for(int j=start;j<end;j++){
-            len+=arr[j].length();
-            count++;
-        }
-
-        int totalSpace = width - len;         //total space required
-//        System.out.println("Total Space :"+totalSpace);
-//        int spaceLen   = (count == 1) ? 0 : totalSpace/(count-1);//space between words
-//        System.out.println("Spcae len : "+spaceLen);
-        int spaceCount = (count == 1) ? 0 : totalSpace/(count-1); //number of spaces to be added
-        System.out.println("Space count : "+spaceCount);
-        int remSpace   = (spaceCount == 0) ? totalSpace : totalSpace%(count-1); //number of spaces remained after even distribution
-        System.out.println("rem space : "+remSpace);
-
-        for(int j=start;j<end-1;j++){
-            sb.append(arr[j]);
-            if(spaceCount >0){
-                int currSpaceLen = count-1;
-                while(currSpaceLen >0){
-                    sb.append(" ");
-                    currSpaceLen--;
+class Solution {
+    public List<String> fullJustify(String[] words, int maxLen) {
+        List<String> ans = new ArrayList<>();
+        List<String> tempList = new ArrayList<>();  //to store the words that can be put in one same line
+        int tempLen = 0;     // track the length of current line: wordsLen + spaces between words
+        int index = 0;      //index of word in words array
+        int wordsLen = 0;   // sum of all words that can be put in same line
+        int spaces = 0;     // sapces that need to be filled
+        
+        while(index < words.length) {
+            if((tempLen + words[index].length()) <= maxLen) {   //check if cur word can be put in cur line
+                tempLen += words[index].length() + 1;
+                tempList.add(words[index++]);
+            }else {
+                StringBuilder sb = new StringBuilder();
+                wordsLen = tempLen - tempList.size();
+                spaces = maxLen - wordsLen;
+                if(tempList.size() == 1) {          // there's only one word at cur line, then just fill the spaces
+                    sb.append(tempList.get(0));
+                    for(int i = 0; i < spaces; i++) {
+                        sb.append(" ");
+                    }
+                    ans.add(sb.toString());
+                }else if(tempList.size() > 1){      // there's many words in cur line, do the evenly spaceing
+                    int distance = spaces / (tempList.size() - 1);
+                    int reminder = spaces % (tempList.size() - 1);
+                    
+                    for(int i = 0; i < tempList.size() - 1; i++) {
+                        sb.append(tempList.get(i));
+                        if(reminder > 0){
+                            sb.append(" ");
+                            reminder--;
+                        }
+                        for(int j = 0; j < distance; j++)
+                            sb.append(" ");
+                    }
+                    sb.append(tempList.get(tempList.size() - 1));
+                    ans.add(sb.toString());   
                 }
-                spaceCount--;
+                tempList.clear();  
+                tempLen = 0;
             }
-
         }
-
-        while(remSpace>0){
-            sb.append(" ");
-            remSpace--;
-        }
-        sb.append(arr[end-1]);
-        System.out.println(sb.toString());
-        return sb.toString();
-    }
-
-    public static String justify_Last(String[] arr,int start,int width){
+        
+        // dealing with last line
         StringBuilder sb = new StringBuilder();
-        int len = 0;
-        for (int i=start;i<arr.length;i++){
-            sb.append(arr[i]);
-            len+=arr[i].length();
-            if(len<width){
-                sb.append(" ");
-                len++;
-            }
-        }
-        while (len<width){
+        for(int i = 0; i < tempList.size() - 1; i++) {
+            sb.append(tempList.get(i));
             sb.append(" ");
-            len++;
         }
-
-        return sb.toString();
+        sb.append(tempList.get(tempList.size() - 1));
+        for(int i = 0; i < maxLen - (tempLen - 1); i++)
+                  sb.append(" ");
+        ans.add(sb.toString());
+        return ans;
+        
     }
-    public static void main(String[] args){
-        String[] words = {"Science","is","what","we","understand","well","enough","to","explain", "to","a","computer.","Art","is","everything","else","we","do"};
-        fullJustify(words,20);
-
-    }//4,4,4,7
 }
