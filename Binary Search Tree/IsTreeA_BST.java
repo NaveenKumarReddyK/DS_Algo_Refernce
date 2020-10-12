@@ -1,21 +1,19 @@
-
-public class IsTreeA_BST {
-    public static void main(String[] args) {
-        /* isBst(head,lower_linit,higer_limit)
-        if head null return true
-        if head.value < lower_limt return false
-        if head.value > higer_limit return false
-
-        leftBST = true;
-        rightBST = true;
-
-        if head.left != null
-        leftBST = isBST(head.left,lower_limit,head.value)
-
-        if(leftBST a&& head.right != null)
-        rightBST = isBST(head.right,head.val,higerlimit)
-
-        return leftBST&&roghtBST
-         */
+class IsTreeA_BST {
+    public boolean isValidBST(TreeNode root) {
+        
+      return bst(root,null,null);
+    }
+    public boolean bst(TreeNode node,TreeNode leftNode,TreeNode rightNode){
+        if(node == null){
+            return true;
+        }
+      if(leftNode != null && node.val <= leftNode.val){
+          return false;
+      }
+        if(rightNode != null && node.val >= rightNode.val){
+          return false;
+      }
+        
+        return (bst(node.left,leftNode,node) && bst(node.right,node,rightNode));
     }
 }
