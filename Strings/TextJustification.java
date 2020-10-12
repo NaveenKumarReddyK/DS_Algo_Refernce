@@ -1,58 +1,56 @@
-class Solution {
-    public List<String> fullJustify(String[] words, int maxLen) {
-        List<String> ans = new ArrayList<>();
-        List<String> tempList = new ArrayList<>();  //to store the words that can be put in one same line
-        int tempLen = 0;     // track the length of current line: wordsLen + spaces between words
-        int index = 0;      //index of word in words array
-        int wordsLen = 0;   // sum of all words that can be put in same line
-        int spaces = 0;     // sapces that need to be filled
+class Solution{
+ public List<String> fullJustify(String[] words, int maxWidth) {
+        int left = 0; List<String> result = new ArrayList<>();
         
-        while(index < words.length) {
-            if((tempLen + words[index].length()) <= maxLen) {   //check if cur word can be put in cur line
-                tempLen += words[index].length() + 1;
-                tempList.add(words[index++]);
-            }else {
-                StringBuilder sb = new StringBuilder();
-                wordsLen = tempLen - tempList.size();
-                spaces = maxLen - wordsLen;
-                if(tempList.size() == 1) {          // there's only one word at cur line, then just fill the spaces
-                    sb.append(tempList.get(0));
-                    for(int i = 0; i < spaces; i++) {
-                        sb.append(" ");
-                    }
-                    ans.add(sb.toString());
-                }else if(tempList.size() > 1){      // there's many words in cur line, do the evenly spaceing
-                    int distance = spaces / (tempList.size() - 1);
-                    int reminder = spaces % (tempList.size() - 1);
-                    
-                    for(int i = 0; i < tempList.size() - 1; i++) {
-                        sb.append(tempList.get(i));
-                        if(reminder > 0){
-                            sb.append(" ");
-                            reminder--;
-                        }
-                        for(int j = 0; j < distance; j++)
-                            sb.append(" ");
-                    }
-                    sb.append(tempList.get(tempList.size() - 1));
-                    ans.add(sb.toString());   
-                }
-                tempList.clear();  
-                tempLen = 0;
-            }
+        while (left < words.length) {
+            int right = findRight(left, words, maxWidth);
+            result.add(justify(left, right, words, maxWidth));
+            left = right + 1;
         }
         
-        // dealing with last line
-        StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < tempList.size() - 1; i++) {
-            sb.append(tempList.get(i));
-            sb.append(" ");
-        }
-        sb.append(tempList.get(tempList.size() - 1));
-        for(int i = 0; i < maxLen - (tempLen - 1); i++)
-                  sb.append(" ");
-        ans.add(sb.toString());
-        return ans;
+        return result;
+    }
+    
+    private int findRight(int left, String[] words, int maxWidth) {
+        int right = left;
+        int sum = words[right++].length();
         
+        while (right < words.length && (sum + 1 + words[right].length()) <= maxWidth)
+            sum += 1 + words[right++].length();
+            
+        return right - 1;
+    }
+    
+    private String justify(int left, int right, String[] words, int maxWidth) {
+        if (right - left == 0) return padResult(words[left], maxWidth);
+        
+        boolean isLastLine = right == words.length - 1;
+        int numSpaces = right - left;
+        int totalSpace = maxWidth - wordsLength(left, right, words);
+        
+        String space = isLastLine ? " " : blank(totalSpace / numSpaces);
+        int remainder = isLastLine ? 0 : totalSpace % numSpaces;
+        
+        StringBuilder result = new StringBuilder();
+        for (int i = left; i <= right; i++)
+            result.append(words[i])
+                .append(space)
+                .append(remainder-- > 0 ? " " : "");
+        
+        return padResult(result.toString().trim(), maxWidth);
+    }
+    
+    private int wordsLength(int left, int right, String[] words) {
+        int wordsLength = 0;
+        for (int i = left; i <= right; i++) wordsLength += words[i].length();
+        return wordsLength;
+    }
+    
+    private String padResult(String result, int maxWidth) {
+        return result + blank(maxWidth - result.length());
+    }
+    
+    private String blank(int length) {
+        return new String(new char[length]).replace('\0', ' ');
     }
 }
