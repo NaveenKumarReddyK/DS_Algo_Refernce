@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Threesome {
+public class Three_Sum {
     public static List<List<Integer>> threeSum(int[] nums) {
         //subtract each number and search for 2 elements in remaining array
         List<List<Integer>> outList = new ArrayList<List<Integer>>();
